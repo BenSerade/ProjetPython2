@@ -15,7 +15,7 @@ def formulaire_client(request):
 @login_required
 def session_list(request):
     sessions = Session.objects.all()
-    return render(request, 'sessions/templates/session_list.html', {'sessions': sessions})
+    return render(request, 'session_list.html', {'sessions': sessions})
 
 @login_required
 def create_session(request):
@@ -26,13 +26,13 @@ def create_session(request):
             return redirect('session_detail', pk=session.pk)
     else:
         form = SessionForm()
-    return render(request, 'sessions/templates/create_session.html', {'form': form})
+    return render(request, 'create_session.html', {'form': form})
 
 @login_required
 def session_detail(request, pk):
     session = get_object_or_404(Session, pk=pk)
     form_submissions = FormSubmission.objects.filter(session=session)
-    return render(request, 'sessions/templates/session_detail.html', {'session': session, 'form_submissions': form_submissions})
+    return render(request, 'session_detail.html', {'session': session, 'form_submissions': form_submissions})
 
 @login_required
 def submit_form(request, session_pk):
@@ -49,7 +49,7 @@ def submit_form(request, session_pk):
             return redirect('session_detail', pk=session_pk)
     else:
         form = FormSubmissionForm()
-    return render(request, 'sessions/templates/submit_form.html', {'form': form, 'session': session})
+    return render(request, 'submit_form.html', {'form': form, 'session': session})
 
 @csrf_exempt
 def submit_response_view(request):
