@@ -15,7 +15,7 @@ def formulaire_client(request):
 @login_required
 def session_list(request):
     sessions = Session.objects.all()
-    return render(request, 'templates/session_list.html', {'sessions': sessions})
+    return render(request, 'session_list.html', {'sessions': sessions})
 
 @login_required
 def create_session(request):
