@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de la session</title>
+</head>
+<body>
+    <h1>Détails de la session</h1>
+    <h2>{{ session }}</h2>
+    <h3>Submissions:</h3>
+    <ul>
+        {% for form_submission in form_submissions %}
+            <li>{{ form_submission }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Formulaire d'Evaluation</title>
+</head>
+<body>
+
+<h2>Formulaire avec envoi automatique et barres de progression ajustables</h2>
+
+<form id="monFormulaire">
+    <div>
+        <label for="nom">Votre nom :</label>
+        <input type="text" id="nom" name="nom">
+    </div>
+    <div>
+        <label for="prenom">Votre prénom :</label>
+        <input type="text" id="prenom" name="prenom">
+    </div>
+    <div>
+        <label for="mail">Votre mail :</label>
+        <input type="text" id="mail" name="mail">
+    </div>
+
+    <fieldset>
+        <legend> Niveau de difficulté : </legend>
+        <input type="radio" id="Choix1" name="choix_difficulte" value="Facile">
+        <label for="Choix1">Facile</label><br>
+        <input type="radio" id="Choix2" name="choix_difficulte" value="Un peu compliqué">
+        <label for="Choix2">Un peu compliqué</label><br>
+        <input type="radio" id="Choix3" name="choix_difficulte" value="Très compliqué">
+        <label for="Choix3">Très compliqué</label><br>
+        <input type="radio" id="4" name="choix_difficulte" value="Au secours !">
+        <label for="Choix4">Au secours !</label>
+    </fieldset>
+
+    <fieldset>
+        <legend>Progression Personelle</legend>
+        <input type="checkbox" id="progression1" name="progression" value="J'ai compris">
+        <label for="progression1">J'ai compris</label><br>
+        <input type="checkbox" id="progression2" name="progression" value="Je dois encore pratiquer">
+        <label for="progression2">Je dois encore pratiquer</label><br>
+        <input type="checkbox" id="progression3" name="progression" value="C'est flou">
+        <label for="progression3">C'est flou</label>
+    </fieldset>
+
+    <div>
+        <label for="rangeProgress1">Progression 1 :</label>
+        <input type="range" id="rangeProgress1" name="progression" min="0" max="100" value="20" oninput="progress1.value=this.value">
+        <progress id="progress1" value="20" max="100"></progress><br>
+
+        <label for="rangeProgress2">Progression 2 :</label>
+        <input type="range" id="rangeProgress2" name="progression" min="0" max="100" value="50" oninput="progress2.value=this.value">
+        <progress id="progress2" value="50" max="100"></progress><br>
+
+        <label for="rangeProgress3">Progression 3 :</label>
+        <input type="range" id="rangeProgress3" name="progression" min="0" max="100" value="80" oninput="progress3.value=this.value">
+        <progress id="progress3" value="80" max="100"></progress>
+    </div>
+</form>
+
+<script>
+function collecterDonneesEtEnvoyer() {
+    const nom = document.getElementById('nom').value;
+    const couleurChoisie = document.querySelector('input[name="couleur"]:checked')?.value;
+    const interetsChoisis = Array.from(document.querySelectorAll('input[name="interet"]:checked')).map(el => el.value);
+    const progressions = [
+        document.getElementById('rangeProgress1').value,
+        document.getElementById('rangeProgress2').value,
+        document.getElementById('rangeProgress3').value
+    ];
+
+    const data = {
+        nom: nom,
+        couleur: couleurChoisie,
+        interets: interetsChoisis,
+        progressions: progressions
+    };
+
+    fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Succès:', data);
+    })
+    .catch((error) => {
+        console.error('Erreur:', error);
+    });
+}
+function submitForm() {
+    const formData = {
+        nom: document.getElementById('nom').value,
+        // Ajoutez d'autres champs de formulaire ici
+    };
+
+    fetch('http://localhost:5000/submit_response', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log('Réponse soumise avec succès');
+        } else {
+            console.error('Erreur lors de la soumission de la réponse');
+        }
+    })
+    .catch(error => {
+        console.error('Erreur lors de la soumission de la réponse:', error);
+    });
+}
+// Exécuter la fonction toutes les minutes
+setInterval(collecterDonneesEtEnvoyer, 60000);
+</script>
+</body>
+</html>
